@@ -8,6 +8,7 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 }).addTo(map);
 
 //center the map on the user
+//Needs tested on mobile, rn it isn't very accurate on desktop :(
 var mymap = map.locate({setView: true, maxZoom: 24, watch: true, enableHighAccuracy: true});
 
 function onLocationFound(e) {
