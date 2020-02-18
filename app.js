@@ -3,8 +3,7 @@ const fs = require('fs');
 const port = 3000;
 
 const server = http.createServer(function(req, res){
-    console.log(req.url);
-           
+               
     switch(req.url){
 
         case '/css/main.css':
@@ -48,6 +47,20 @@ const server = http.createServer(function(req, res){
     }
 });
 
+const io = require('socket.io')(server);
+
+var userCount =0;
+
+io.on('connection', function(socket){
+    console.log('a user connected');
+    // userCount++;
+    // console.log(userCount);
+    // socket.emit('count_message', {'userCount':userCount});
+    socket.on('disconnect', function(){
+      console.log('user disconnected');
+    });
+  });
+
 server.listen(port, function (error){
     if (error){
         console.log('Something went wrong', error);
@@ -56,7 +69,3 @@ server.listen(port, function (error){
     }
 });
 
-
-server.on('connection', function(socket){
-    console.log('new user connected');
-});

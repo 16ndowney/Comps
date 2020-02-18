@@ -11,10 +11,22 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 //Needs tested on mobile, rn it isn't very accurate on desktop :(
 var mymap = map.locate({setView: true, maxZoom: 24, watch: true, enableHighAccuracy: true});
 
+var userMarker={};
 function onLocationFound(e) {
-    var radius = e.accuracy;
 
-    L.circle(e.latlng, {radius: '10', opacity: '1.0'} ).addTo(map);
+    if(userMarker != undefined){
+        map.removeLayer(userMarker); //clear previous marker
+    }
+        
+    mymap = map.locate({setView: true, maxZoom: 24, watch: true, enableHighAccuracy: true}); //find user location, center map on them   
+    userMarker = L.circle(e.latlng, {radius: '10', opacity: '1.0'}).addTo(map);// add a marker to the user's current location
 }
+    
 
 map.on('locationfound', onLocationFound);
+
+var socket = io();
+
+socket.on('count_message', function(arg){
+    console.log(arg.userCount);
+});
