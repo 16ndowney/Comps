@@ -25,8 +25,12 @@ function onLocationFound(e) {
 
 map.on('locationfound', onLocationFound);
 
-var socket = io();
+// var socket = io();
 
-socket.on('count_message', function(arg){
-    console.log(arg.userCount);
-});
+var pinGroup = L.layerGroup().addTo(map);
+
+// socket.on('pin', function(arg){
+//     var pin = L.marker([arg.lat, arg.long]).addTo(pinGroup);
+//     pin.bindPopup("<h3>test</h3>"); //.openPopup();
+//     //var popUp=L.popup().setLatLng([arg.lat, arg.long]).setContent(arg.title).openOn(map);
+// });

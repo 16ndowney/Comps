@@ -4,7 +4,27 @@ body {
     padding: 0;
     margin: 0;
 }
-html, body, #mapid {
+ html, body, .mapbox, #mapid {
     height: 100%;
     width: 100vw;
+} 
+
+.mapbox {
+    position: relative;
+}
+
+.mapbox .overlay {
+    position: absolute; /* forgive me, for i have sinned */
+    top: 0;
+    left: 0;
+    z-index: 314159; /* or some other number */
+    pointer-events: none;
+}
+
+.log_out{
+    z-index: 100;
+}
+
+.mapbox .overlay .btn {
+    pointer-events: initial;
 }
