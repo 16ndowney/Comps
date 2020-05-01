@@ -4,44 +4,79 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-		<title> <%= name %> </title>
-
+		<title> Comps </title>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
 		integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
 		crossorigin=""/>
 		<link href="css/main.css" rel="stylesheet">
 		<link href='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css' rel='stylesheet' />
+		<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+		<link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
 	</head>
 
 	<body>
 		
 
 
-		<div class="container-fluid" style="height: 100%; width: 100vw; padding: 0 !important;">
-			<div class="mapbox">
-				<div id="mapid"></div>
-				<div class="row-fluid overlay">
-					<div>
-						<form action="/logout?_method=DELETE" method="POST">
-							<button class="btn btn-primary">Log Out</button>
-						</form>
-					</div>
+		<div class="container-fluid row" style="height: 100%; width: 100%; padding: 0 !important;"> <!-- forgive me for i have sinned  -->
+			<div class="row-fluid overlay" id="logout-container"> <!-- logout button -->
+				<div>
+					<form action="/logout?_method=DELETE" method="POST">
+						<button class="btn btn-primary">Log Out</button>
+					</form>
 				</div>
+			</div>
+			<div class="mapbox" id="map_container">
+				<div id="mapid"></div>
+				<div class="row-fluid overlay" id="add-button"><!-- add location button -->
+					<div>
+						<button style="border-radius: 100%; border: none; padding: 0px" id="add-button"><i class="fas fa-plus-circle fa-4x"></i></button>
+					</div>
+				</div>	
+			</div>
+			<div class="col-6" style="right:0; top:0; height: 100%; background-color: black; display: none;" id="add-menu"> <!-- add location menu -->
+				<button id="x"><i class="fas fa-times"></i></button>
+				<form action="/addLocation" method="POST" style="color:white;">
+					<div>
+						<label for='loc_name'>Name</label>
+						<input type='text' id='loc_name' name='loc_name' required>
+					</div>
+					<div>
+						<label for='picture'>Picture</label>
+						<input type='file' id='picture' name='picture' optional>
+					</div>
+					<input type="hidden" id='location' name='location' rquired>
+					<div>
+						<label for='password'>Description</label>
+						<input type='text' id='description' name='description' optional>
+					</div>
+					<button type='submit' id="submitLocation">Submit</button>
+				</form>
 			</div>
 		</div>
 
 
 
 		<script src='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'></script>
+		<script src="https://kit.fontawesome.com/3144e6cf69.js" crossorigin="anonymous"></script>
 		<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
 		integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
 		crossorigin=""></script>
-		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/jquery-3.5.0.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+		<!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script> -->
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-		<script src="/socket.io/socket.io.js"></script>
+		<script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js"></script>
+		<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+		<script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+		<script src="js/fileUpload.js"></script>
 		<script src="js/client.js"> </script>
+		<script>
+			$("#test").click(function(){
+				console.log("it happened b word");
+			})
+		</script>
 
 	</body>
 </html>

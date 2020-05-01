@@ -6,25 +6,40 @@ body {
 }
  html, body, .mapbox, #mapid {
     height: 100%;
-    width: 100vw;
+    width: 100%; 
 } 
 
 .mapbox {
     position: relative;
 }
 
-.mapbox .overlay {
+#logout-container {
     position: absolute; /* forgive me, for i have sinned */
     top: 0;
-    left: 0;
+    right: 0;
     z-index: 314159; /* or some other number */
-    pointer-events: none;
+    /* pointer-events: none; */
 }
 
 .log_out{
     z-index: 100;
 }
 
+#add-button {
+    position: absolute; /* forgive me, for i have sinned */
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 314159; /* or some other number */
+}
+
 .mapbox .overlay .btn {
     pointer-events: initial;
+}
+
+.fas {
+    background-image: radial-gradient(at center, white 40%, transparent 40%);
+  }
+
+.clickable {
+    cursor: pointer
 }

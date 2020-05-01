@@ -14,17 +14,18 @@ const initializePassport = require('./passport-config');
 const flash = require('express-flash');
 const session = require('express-session');
 const methodOverride = require('method-override');
+const mongoose = require('mongoose');
 
 initializePassport(
     passport, 
     email => users.find(user => user.email === email),
     id => users.find(user => user.id === id)
-
 );
 
 
 
-users = []; // just for now
+users = [];
+locations = [];
 
 
 /* Create server, serve files */
@@ -57,6 +58,10 @@ app.post('/login', checkNotAuthenticated,passport.authenticate('local', {
     failureFlash: true
 }))
 
+app.get('/assets/login-720.png', checkNotAuthenticated,function(req, res){
+    res.sendFile('login-720.png', {root: path.join(__dirname,'./assets')});
+});
+
 //serve registration page
 app.get('/register', checkNotAuthenticated,function(req, res){
     res.render('register.ejs');
@@ -78,6 +83,22 @@ app.post('/register', checkNotAuthenticated,async function(req, res){
     console.log(users);
 });
 
+app.post('/addLocation', function(req,res){
+    console.log(req.body);
+    res.redirect('/');
+    locations.push({
+        id: Date.now().toString(),
+        name: req.body.loc_name,
+        picture: req.body.picture,
+        location: req.body.location,
+        description: req.body.description
+    });
+})
+
+app.get('/getLocations', function(req,res){
+    res.send(locations);
+})
+
 //logout
 app.delete('/logout', function(req,res){
     req.logOut();
@@ -89,11 +110,21 @@ app.get('/css/main.css', function(req, res){
     res.sendFile('main.css', {root: path.join(__dirname,'./css')});
 });
 
-//serve javascript
+app.get('/css/test.css', function(req, res){
+    res.sendFile('test.css', {root: path.join(__dirname,'./css')});
+});
+
+//serve client js
 app.get('/js/client.js',function(req, res){
     res.sendFile('client.js', {root: path.join(__dirname,'./js')});
 });
 
+//serve file uploader
+app.get('/js/fileUpload.js',function(req, res){
+    res.sendFile('fileUpload.js', {root: path.join(__dirname,'./js')});
+});
+
+//bring server up
 app.listen(port, function (error){
     if (error){
         console.log('Something went wrong', error);
@@ -102,66 +133,15 @@ app.listen(port, function (error){
     }
 });
 
+//connect to db
+mongoose.connect(process.env.DATABASE_URL, {
+    useNewUrlParser: true,})
 
+const db = mongoose.connection;
+db.on('error', error => console.error(error));
+db.once('open', error => console.log('Connected to Mongoose'));
 
-// create db
-// const db = mysql.createConnection({
-//     host: 'localhost',
-//     user: 'root',
-//     password: '123456',
-//     database: 'nodemysql'
-// });
-
-//Create a table
-// app.get('/createpoststable', function(req, res){
-//     let sql = 'CREATE TABLE posts(id int AUTO_INCREMENT, title VARCHAR(255), body VARCHAR(255), PRIMARY KEY(id))';
-//     db.query(sql, function(err, result){
-//         if(err) throw err;
-//         console.log(result);
-//         res.send('Posts table created');
-//     });
-// });
-
-//Insert post 1
-// app.get('/addpost2', function(req, res){
-//     let post = {title: 'Post two', body:'this is post #1'};
-//     let sql = 'INSERT INTO posts SET ?';
-//     let query = db.query(sql, post, function(err, result){
-//         if(err) throw err;
-//         console.log(result);
-//         res.send('Insert succeded');
-//     });
-// });
-
-//select posts
-// app.get('/getposts', function(req,res){
-//     let sql ='SELECT * FROM posts';
-//     let query = db.query(sql, function(err, results){
-//         if (err) throw err;
-//         console.log(results);
-//         res.send('success');
-//     });
-// });
-
-//connect
-
-// db.connect(function(err){
-//     if(err){
-//         throw err;
-//     }
-//     console.log('MySQL Connected...');
-// });
-
-// app.get('/createdb', function(req, res){
-//     let sql = 'CREATE DATABASE nodemysql';
-//     db.query(sql, function(err, result){
-//         if(err){
-//             console.log(result)
-//             throw err;
-//         }
-//         res.send('database created...');
-//     });
-// });
+mongoose.model('users', {name: String, email: String, password: String});
 
 function checkAuthenticated(req, res, next){
     if(req.isAuthenticated()){
